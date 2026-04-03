@@ -1,0 +1,519 @@
+
+tagaro_prestige_report.html
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAGARO.it — PRESTIGE EDITION: Report Triade Strategica</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+        }
+        .header {
+            background-color: #0d2540;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        .header p {
+            margin: 5px 0 0;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .navbar {
+            background-color: #1a3a5c;
+            padding: 10px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .navbar button {
+            background-color: #1a3a5c;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .navbar button:hover {
+            background-color: #e8a020;
+            transform: translateY(-2px);
+        }
+        .navbar button.active {
+            background-color: #e8a020;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .section-title {
+            font-size: 2em;
+            color: #0d2540;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #e8a020;
+            padding-bottom: 10px;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+        .card h3 {
+            color: #1a3a5c;
+            font-size: 1.4em;
+            margin-top: 0;
+        }
+        .card p {
+            font-size: 0.95em;
+            color: #555;
+        }
+        .card .price {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #e8a020;
+            margin-top: 10px;
+        }
+        .card .details {
+            font-size: 0.85em;
+            color: #777;
+            margin-top: 5px;
+        }
+        .chart-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.07);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .prompt-box {
+            background-color: #eef;
+            border-left: 5px solid #0d2540;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9em;
+            position: relative;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #1a3a5c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+        .copy-btn:hover {
+            background-color: #e8a020;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: 600;
+            color: #1a3a5c;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f8f8;
+        }
+        .category-title {
+            font-size: 1.5em;
+            color: #0d2540;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e8a020;
+            padding-bottom: 5px;
+        }
+        .disclaimer {
+            font-size: 0.8em;
+            color: #777;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>TAGARO.it — PRESTIGE EDITION</h1>
+        <p>Report Riservato: Ricerca Immobili "Triade Strategica"</p>
+        <p>Trophy Locations Research - 24M€ Fatturato - Aprile 2026</p>
+    </div>
+    <div class="navbar">
+        <button class="tab-button active" onclick="openTab(event, 'Panoramica')">📊 Panoramica</button>
+        <button class="tab-button" onclick="openTab(event, 'Milano')">🏙️ Milano</button>
+        <button class="tab-button" onclick="openTab(event, 'Venezia')">🚢 Venezia</button>
+        <button class="tab-button" onclick="openTab(event, 'AnalisiPrestige')">💎 Analisi Prestige</button>
+        <button class="tab-button" onclick="openTab(event, 'PromptPerfetto')">💡 Prompt Perfetto</button>
+    </div>
+
+    <div class="container">
+        <div id="Panoramica" class="tab-content active">
+            <h2 class="section-title">Ricerca Riservata — Triade Strategica</h2>
+            <p>Per un brand di successo come TAGARO.it (19M bottiglie, 24M€ fatturato), la scelta della location non è solo una decisione operativa, ma un investimento strategico nel posizionamento globale. Questo report identifica le <b>"Trophy Locations"</b> — le posizioni di massimo prestigio e affluenza a Milano e Venezia, le alternative <b>"Premium"</b> per un buon investimento e le <b>"Entry Level"</b> come esempio di direzione sbagliata.</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Trophy Locations</h3>
+                    <p>Massimo prestigio e autorevolezza, investimento sicuro.</p>
+                    <p class="price">Milano: € 1.4M+</p>
+                    <p class="price">Venezia: € 2.2M+</p>
+                    <p class="details">Es. Corso Garibaldi (MI), Piscina San Moise (VE)</p>
+                </div>
+                <div class="card">
+                    <h3>Premium Locations</h3>
+                    <p>Medio prestigio, buon investimento con ottimo ROI.</p>
+                    <p class="price">Milano: € 400K - € 800K</p>
+                    <p class="price">Venezia: € 275K</p>
+                    <p class="details">Es. Piazza del Tricolore (MI), Cannaregio (VE)</p>
+                </div>
+                <div class="card">
+                    <h3>Entry Level Locations</h3>
+                    <p>Basso prestigio, investimento da evitare per TAGARO.it.</p>
+                    <p class="price">Milano: € 130K - € 400K</p>
+                    <p class="price">Venezia: € 95K</p>
+                    <p class="details">Es. Viale Bianca Maria (MI), Mestre (VE)</p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Sintesi Esecutiva</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Immobili Prestige</h3>
+                    <p class="price">7</p>
+                    <p class="details">Trophy + Premium identificati</p>
+                </div>
+                <div class="card">
+                    <h3>Fatturato TAGARO</h3>
+                    <p class="price">24M€</p>
+                    <p class="details">Riflette la necessità di location d'élite</p>
+                </div>
+                <div class="card">
+                    <h3>Città Elite</h3>
+                    <p class="price">2</p>
+                    <p class="details">Milano e Venezia</p>
+                </div>
+                <div class="card">
+                    <h3>Affluenza Annua</h3>
+                    <p class="price">100M+</p>
+                    <p class="details">Contatti visivi stimati (Trophy Zones)</p>
+                </div>
+                <div class="card">
+                    <h3>ROI Strategico</h3>
+                    <p class="price">8-10%</p>
+                    <p class="details">Rivalutazione patrimoniale + reddito (Trophy)</p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Comparazione Prezzi per Categoria</h2>
+            <div class="chart-container">
+                <img src="price_comparison.png" alt="Comparazione Prezzi per Categoria" style="width:100%;">
+            </div>
+
+            <h2 class="section-title">Analisi Multidimensionale Prestige</h2>
+            <div class="chart-container">
+                <img src="radar_prestige.png" alt="Analisi Radar Prestige" style="width:100%;">
+            </div>
+
+            <p class="disclaimer"><b>Disclaimer:</b> I prezzi e le metrature sono indicativi e soggetti a variazioni di mercato. Le informazioni sui vincoli burocratici sono aggiornate al 2026 ma richiedono verifica puntuale.</p>
+        </div>
+
+        <div id="Milano" class="tab-content">
+            <h2 class="section-title">Milano — Dettaglio Immobili</h2>
+
+            <h3 class="category-title">Trophy Locations (Massimo Prestigio)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Indirizzo/Zona</th>
+                        <th>Mq</th>
+                        <th>Prezzo</th>
+                        <th>€/mq</th>
+                        <th>Agenzia</th>
+                        <th>Caratteristiche</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>Corso Garibaldi, Brera</td><td>50</td><td>€ 1.400.000</td><td>28.000</td><td>Maxire</td><td>1 vetrina, via di massimo prestigio e passaggio.</td></tr>
+                    <tr><td>2</td><td>Corso Garibaldi (nuovo)</td><td>70</td><td>€ 1.250.000</td><td>17.857</td><td>Maxire</td><td>Piano terra, cuore di Brera, libero subito.</td></tr>
+                    <tr><td>3</td><td>Piazza del Carmine, Brera</td><td>120</td><td>€ 1.800.000</td><td>15.000</td><td>Dharma House</td><td>Ampio negozio ristrutturato, zona pedonale d'élite.</td></tr>
+                    <tr><td>4</td><td>Foro Buonaparte, Brera</td><td>150</td><td>€ 1.500.000</td><td>10.000</td><td>Dharma House</td><td>Palazzo storico, ristrutturato, grande charme.</td></tr>
+                    <tr><td>5</td><td>Via della Spiga</td><td>190</td><td>Trattativa Riservata</td><td>> 30.000</td><td>Jarvés Luxury</td><td>La "passerella urbana" del Quadrilatero.</td></tr>
+                    <tr><td>6</td><td>Via Brera</td><td>620</td><td>Trattativa Riservata</td><td>-</td><td>Immobiliare Bassoli</td><td>Posizione centralissima, zona arte/moda.</td></tr>
+                    <tr><td>7</td><td>Via Mercato, Brera</td><td>115</td><td>€ 2.880.000</td><td>25.043</td><td>Immobiliare Bassoli</td><td>Grande visibilità, eleganza e raffinatezza.</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="category-title">Premium Locations (Buon Investimento)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Indirizzo/Zona</th>
+                        <th>Mq</th>
+                        <th>Prezzo</th>
+                        <th>€/mq</th>
+                        <th>Agenzia</th>
+                        <th>Caratteristiche</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>Piazza del Tricolore</td><td>40</td><td>€ 800.000</td><td>20.000</td><td>Maxire</td><td>Zona elegante e dinamica, ottima accessibilità.</td></tr>
+                    <tr><td>2</td><td>Viale Monte Nero</td><td>65</td><td>€ 398.000</td><td>6.123</td><td>16CASA</td><td>Una vetrina, buone condizioni, 2 ingressi.</td></tr>
+                    <tr><td>3</td><td>Via Benvenuto Cellini</td><td>126</td><td>€ 745.000</td><td>5.912</td><td>Coldwell Banker</td><td>Angolare, 5 vetrine, in ristrutturazione.</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="category-title">Entry Level Locations (Da Evitare)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Indirizzo/Zona</th>
+                        <th>Mq</th>
+                        <th>Prezzo</th>
+                        <th>€/mq</th>
+                        <th>Agenzia</th>
+                        <th>Caratteristiche</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>Viale Bianca Maria</td><td>30</td><td>€ 130.000</td><td>4.333</td><td>Immobili In</td><td>Interrato, zona Monforte/Tricolore, ristrutturato.</td></tr>
+                    <tr><td>2</td><td>Viale Cirene</td><td>225</td><td>€ 395.000</td><td>1.755</td><td>Toscano Spa</td><td>Piano S1 ma come piano terra, da personalizzare.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="Venezia" class="tab-content">
+            <h2 class="section-title">Venezia — Dettaglio Immobili</h2>
+
+            <h3 class="category-title">Trophy Locations (Massimo Prestigio)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Indirizzo/Zona</th>
+                        <th>Mq</th>
+                        <th>Prezzo</th>
+                        <th>€/mq</th>
+                        <th>Agenzia</th>
+                        <th>Caratteristiche</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>Piscina San Moise, San Marco</td><td>35</td><td>€ 2.240.000</td><td>64.000</td><td>Schiavon</td><td>Ultima attività gelateria, zona lusso estremo.</td></tr>
+                    <tr><td>2</td><td>Calle dei Fuseri, San Marco</td><td>20</td><td>€ 380.000</td><td>19.000</td><td>Remax</td><td>Locato (€1.800/mese), zona altissimo passaggio.</td></tr>
+                    <tr><td>3</td><td>Calle de La Fenice, San Marco</td><td>48</td><td>€ 185.000</td><td>3.854</td><td>Easy Group</td><td>Prezzo competitivo, zona strategica Fenice.</td></tr>
+                    <tr><td>4</td><td>Calle del Lovo, San Marco</td><td>252</td><td>€ 8.500.000</td><td>33.730</td><td>Santa Marina</td><td>Immobile vincolato, conferimento esclusivo.</td></tr>
+                    <tr><td>5</td><td>Piazza San Marco</td><td>260</td><td>€ 8.500.000</td><td>32.692</td><td>Santa Marina</td><td>Palazzetto commerciale unico al mondo.</td></tr>
+                    <tr><td>6</td><td>Rialto, San Polo</td><td>-</td><td>€ 600.000</td><td>-</td><td>-</td><td>Negozio locato bar/cicchetteria, ottimo reddito.</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="category-title">Premium Locations (Buon Investimento)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Indirizzo/Zona</th>
+                        <th>Mq</th>
+                        <th>Prezzo</th>
+                        <th>€/mq</th>
+                        <th>Agenzia</th>
+                        <th>Caratteristiche</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>Cannaregio 1257</td><td>40</td><td>€ 275.000</td><td>6.875</td><td>Gabetti</td><td>Vetrina su strada, doppia pompa acqua alta, magazzino.</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="category-title">Entry Level Locations (Da Evitare)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Indirizzo/Zona</th>
+                        <th>Mq</th>
+                        <th>Prezzo</th>
+                        <th>€/mq</th>
+                        <th>Agenzia</th>
+                        <th>Caratteristiche</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>Via Francesco Scipione Fapanni, Mestre</td><td>74</td><td>€ 95.000</td><td>1.283</td><td>-</td><td>Ristrutturato, posizione centralissima Mestre, vetrina su strada.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="AnalisiPrestige" class="tab-content">
+            <h2 class="section-title">Analisi Finanziaria e Comparativa</h2>
+            <p>Questa sezione offre una visione approfondita delle opportunità di investimento, confrontando le diverse categorie di immobili in base a parametri chiave per un brand del calibro di TAGARO.it.</p>
+
+            <h3 class="category-title">Tabella Comparativa Strategica</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Categoria</th>
+                        <th>Città</th>
+                        <th>Zona</th>
+                        <th>Affluenza</th>
+                        <th>Prestigio</th>
+                        <th>Target</th>
+                        <th>ROI Potenziale</th>
+                        <th>Vincoli Burocratici</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><b>Trophy</b></td><td>Milano</td><td>Brera / Quadrilatero</td><td>Altissima</td><td>10/10</td><td>Ultra-High-Net-Worth, Fashion/Design/Art</td><td>8–10% annuo</td><td>Medi (Soprintendenza)</td></tr>
+                    <tr><td><b>Trophy</b></td><td>Venezia</td><td>San Marco</td><td>Massima</td><td>10/10</td><td>Turistico Internazionale Lusso</td><td>6–8% annuo</td><td>Alti (Delibera n.13/2025)</td></tr>
+                    <tr><td><b>Premium</b></td><td>Milano</td><td>Porta Romana / Risorgimento</td><td>Alta</td><td>7/10</td><td>Professionisti, Residenti Alto-Spendenti</td><td>7–9% annuo</td><td>Bassi/Medi</td></tr>
+                    <tr><td><b>Premium</b></td><td>Venezia</td><td>Cannaregio</td><td>Media/Alta</td><td>6/10</td><td>Turistico, Residenti</td><td>5–7% annuo</td><td>Medi</td></tr>
+                    <tr><td><b>Entry Level</b></td><td>Milano</td><td>Periferia / Zone Industriali</td><td>Bassa</td><td>2/10</td><td>Locale, Basso Spendente</td><td>3–5% annuo</td><td>Bassi</td></tr>
+                    <tr><td><b>Entry Level</b></td><td>Venezia</td><td>Mestre</td><td>Media</td><td>3/10</td><td>Locale, Pendolari</td><td>4–6% annuo</td><td>Bassi</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="category-title">Visualizzazioni Dati</h3>
+            <div class="chart-container">
+                <img src="price_comparison.png" alt="Comparazione Prezzi per Categoria" style="width:100%;">
+            </div>
+            <div class="chart-container">
+                <img src="radar_prestige.png" alt="Analisi Radar Prestige" style="width:100%;">
+            </div>
+
+            <h3 class="category-title">Raccomandazione Strategica Finale</h3>
+            <p>Per un brand con i numeri e il prestigio di <b>TAGARO.it</b>, la raccomandazione principale è puntare su <b>Milano - Corso Garibaldi (Brera)</b> o <b>Venezia - San Marco</b> per le <b>Trophy Locations</b>. Queste offrono il massimo ritorno in termini di immagine e posizionamento. Le <b>Premium Locations</b> rappresentano un ottimo compromesso tra investimento e visibilità, mentre le <b>Entry Level</b> sono da escludere categoricamente per non compromettere l'immagine del brand.</p>
+        </div>
+
+        <div id="PromptPerfetto" class="tab-content">
+            <h2 class="section-title">Il Prompt Perfetto: RSIC-HP (Ricerca Strategica Immobili Commerciali - High Prestige)</h2>
+            <p>Per future ricerche o per estendere l'analisi ad altre capitali europee, ecco il prompt ottimizzato da utilizzare con gli assistenti AI, ora aggiornato per includere la "Triade Strategica":</p>
+            <div class="prompt-box">
+                <button class="copy-btn" onclick="copyToClipboard('promptText')">Copia</button>
+                <pre id="promptText">
+> **RSIC-HP v2.0 — Ricerca Strategica Immobili Commerciali High Prestige (Triade Strategica)**
+>
+> Ciao, sono Vito Iacobellis, agisco per conto di TAGARO.it (fatturato 24M€, 19M bottiglie vendute nel 2025).
+> Sono stato incaricato di trovare immobili commerciali da destinare a punti vendita di riferimento nelle città principali, classificandoli in base al prestigio.
+>
+> **PARAMETRI TASSATIVI:**
+> - Città target: [INSERISCI CITTÀ]
+> - Superficie: 40–50 mq (flessibile per immobili di eccezionale prestigio)
+> - Contratto: SOLO ACQUISTO
+> - Destinazione: Commerciale / Retail
+>
+> **CLASSIFICAZIONE RICHIESTA (con 2-3 esempi per categoria):**
+> 1.  **TROPHY LOCATION (Massimo Prestigio):** Geolocalizzazione privilegiata, medio/alto prestigio, zona di passaggio pedonale ad alta affluenza e di rilievo commerciale, all'altezza del brand TAGARO.it.
+> 2.  **PREMIUM LOCATION (Medio Prestigio):** Buon investimento, zone consolidate con buona affluenza, ottimo rapporto qualità/prezzo, ma non iconiche come le Trophy.
+> 3.  **ENTRY LEVEL (Basso Prestigio):** Esempi di immobili in zone periferiche o senza valore commerciale, da evitare per il brand TAGARO.it, per illustrare la direzione sbagliata.
+>
+> **Fornisci per ogni categoria:**
+> 1. Analisi del Mercato: Prezzi medi, trend, previsioni.
+> 2. Mappatura Zone: Quali quartieri/vie rientrano in questa categoria.
+> 3. Immobili Identificati: Per ogni immobile: indirizzo, metratura, prezzo, caratteristiche, agenzia, valutazione prestige.
+> 4. Analisi Competitiva: Presenza di brand simili/competitor nelle vicinanze.
+> 5. Vincoli & Burocrazia: Soprintendenza, moratorie, tempistiche (se pertinenti).
+> 6. Costi Accessori: Stima completa per un brand premium.
+> 7. Analisi Finanziaria: ROI, rivalutazione patrimoniale, flusso pedonale qualificato.
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Open the default tab on page load
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelector('.tab-button').click();
+        });
+
+        function copyToClipboard(elementId) {
+            var copyText = document.getElementById(elementId);
+            var textArea = document.createElement("textarea");
+            textArea.value = copyText.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("Copy");
+            textArea.remove();
+            alert("Prompt copiato negli appunti!");
+        }
+    </script>
+</body>
+</html>
