@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TAGARO.it — PRESTIGE EDITION: Trophy Locations Report 2026</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.14.0/dist/html2pdf.bundle.min.js"></script>
   <style>
     :root {
       --primary: #0d2540;
@@ -372,6 +373,116 @@
     }
     footer strong { color: var(--accent); }
 
+    /* PDF BUTTON */
+    .pdf-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);
+      color: var(--primary);
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(232,160,32,0.35);
+      transition: transform 0.15s, box-shadow 0.15s;
+      white-space: nowrap;
+    }
+    .pdf-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(232,160,32,0.5); }
+    .pdf-btn:active { transform: translateY(0); }
+
+    /* TOKEN MODAL */
+    .pdf-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5,26,46,0.82);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    .pdf-modal-overlay.open { display: flex; }
+    .pdf-modal {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 40px 36px;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      text-align: center;
+    }
+    .pdf-modal-icon { font-size: 2.8rem; margin-bottom: 12px; }
+    .pdf-modal h3 { color: var(--primary); font-size: 1.25rem; margin-bottom: 8px; }
+    .pdf-modal p { color: var(--muted); font-size: 0.88rem; margin-bottom: 24px; line-height: 1.6; }
+    .pdf-modal input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #dde3ec;
+      border-radius: 10px;
+      font-size: 1rem;
+      color: var(--text);
+      outline: none;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+    .pdf-modal input:focus { border-color: var(--accent); }
+    .pdf-modal input.error { border-color: #e53e3e; }
+    .pdf-modal-error { color: #e53e3e; font-size: 0.82rem; margin-bottom: 14px; min-height: 18px; }
+    .pdf-modal-actions { display: flex; gap: 10px; justify-content: center; }
+    .pdf-modal-actions .btn-confirm {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);
+      color: var(--primary);
+      border: none;
+      border-radius: 10px;
+      padding: 11px 28px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      flex: 1;
+    }
+    .pdf-modal-actions .btn-cancel {
+      background: #eef1f5;
+      color: var(--muted);
+      border: none;
+      border-radius: 10px;
+      padding: 11px 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .pdf-modal-close {
+      position: absolute;
+      top: 14px; right: 18px;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      color: var(--muted);
+      cursor: pointer;
+      line-height: 1;
+    }
+    .pdf-generating {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 12px 0;
+    }
+    .pdf-spinner {
+      width: 22px; height: 22px;
+      border: 3px solid #dde3ec;
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     /* RESPONSIVE */
     @media (max-width: 700px) {
       main { padding: 24px 12px 40px; }
@@ -380,6 +491,7 @@
       .header-inner { padding: 16px 16px; }
       .nav-tabs-inner { padding: 0 12px; }
       .tab-btn { padding: 10px 12px; font-size: 0.8rem; }
+      .pdf-btn { padding: 9px 14px; font-size: 0.8rem; }
     }
   </style>
 </head>
@@ -395,6 +507,7 @@
       </div>
     </div>
     <div class="header-badge">🏆 Prestige</div>
+    <button class="pdf-btn" onclick="openPdfModal()">📄 Scarica PDF Completo</button>
   </div>
   <div class="nav-tabs">
     <div class="nav-tabs-inner">
@@ -402,7 +515,6 @@
       <button class="tab-btn" onclick="showTab('milano')">🏙️ Milano</button>
       <button class="tab-btn" onclick="showTab('venezia')">🚢 Venezia</button>
       <button class="tab-btn" onclick="showTab('analysis')">💎 Analisi Prestige</button>
-      <button class="tab-btn" onclick="showTab('prompt')">💡 Prompt Perfetto</button>
     </div>
   </div>
 </header>
@@ -867,63 +979,6 @@
 
   </div>
 
-  <!-- ===== PROMPT ===== -->
-  <div id="tab-prompt" class="section">
-
-    <div class="section-title">
-      <span class="city-badge" style="background: linear-gradient(135deg, #1a3a5c 0%, #0d2540 100%);">Strumenti</span>
-      <h2>Il Prompt Perfetto RSIC-HP</h2>
-    </div>
-
-    <div class="alert-box prestige">
-      <div class="alert-icon">🎯</div>
-      <div class="alert-content">
-        <h4>RSIC-HP: Ricerca Strategica Immobili Commerciali — High Prestige</h4>
-        <p>Questo prompt è stato ottimizzato per ricerche immobiliari di lusso. Usa questo template per estendere la ricerca ad altre città europee (Roma, Firenze, Torino) o per aggiornamenti futuri. Adattalo inserendo la città target e i parametri specifici del tuo brand.</p>
-      </div>
-    </div>
-
-    <button class="copy-btn" onclick="copyPrompt()">📋 Copia il Prompt negli Appunti</button>
-
-    <div style="background: #1e2a38; border-radius: 14px; padding: 28px 32px; color: #e8edf5; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.8; white-space: pre-wrap; overflow-x: auto; box-shadow: var(--shadow); margin-bottom: 24px; position: relative;" id="promptBox">
-<span style="color: var(--accent); font-weight: 700;">RSIC-HP v1.0 — Ricerca Strategica Immobili Commerciali High Prestige</span>
-
-Ciao, sono <span style="color: var(--accent);">Vito Iacobellis</span>, agisco per conto di <span style="color: var(--accent);">TAGARO.it</span> (fatturato 24M€, 19M bottiglie vendute nel 2025).
-
-Sono stato incaricato di trovare immobili commerciali di ALTO PRESTIGIO da destinare a punti vendita di riferimento nelle città principali.
-
-<span style="color: var(--accent); font-weight: 700;">PARAMETRI TASSATIVI:</span>
-- Città target: [INSERISCI CITTÀ]
-- Superficie: 40–50 mq (flessibile per immobili di eccezionale prestigio)
-- Contratto: SOLO ACQUISTO
-- Destinazione: Commerciale / Retail
-- Geolocalizzazione: TROPHY LOCATION (massimo prestigio, altissima affluenza pedonale qualificata)
-
-<span style="color: var(--accent); font-weight: 700;">Fornisci:</span>
-
-1. Analisi del Mercato Luxury
-Prezzi medi nelle zone di ALTO PRESTIGIO, trend, previsioni.
-
-2. Mappatura Zone Trophy
-Quali quartieri/vie sono "Trophy Locations" per un brand da 24M€?
-
-3. Immobili Identificati
-Per ogni immobile: indirizzo, metratura, prezzo, caratteristiche, agenzia, valutazione prestige.
-
-4. Analisi Competitiva
-Presence di brand di lusso nelle vicinanze.
-
-5. Vincoli & Burocrazia
-Soprintendenza, moratorie, tempistiche.
-
-6. Costi Accessori
-Stima completa per un brand premium.
-
-7. Analisi Finanziaria
-ROI, rivalutazione patrimoniale, flusso pedonale qualificato.</div>
-
-  </div>
-
 </main>
 
 <footer>
@@ -937,16 +992,6 @@ ROI, rivalutazione patrimoniale, flusso pedonale qualificato.</div>
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('tab-' + name).classList.add('active');
     event.target.classList.add('active');
-  }
-
-  function copyPrompt() {
-    const box = document.getElementById('promptBox');
-    const text = box.innerText;
-    navigator.clipboard.writeText(text).then(() => {
-      const btn = document.querySelector('.copy-btn');
-      btn.textContent = '✅ Copiato!';
-      setTimeout(() => { btn.textContent = '📋 Copia il Prompt negli Appunti'; }, 2000);
-    });
   }
 
   // CHART: Prices
@@ -1047,5 +1092,113 @@ ROI, rivalutazione patrimoniale, flusso pedonale qualificato.</div>
     }
   });
 </script>
+
+<!-- ===== PDF TOKEN MODAL ===== -->
+<div class="pdf-modal-overlay" id="pdfModalOverlay" onclick="handleOverlayClick(event)">
+  <div class="pdf-modal" role="dialog" aria-modal="true" aria-labelledby="pdfModalTitle">
+    <button class="pdf-modal-close" onclick="closePdfModal()" aria-label="Chiudi">✕</button>
+    <div class="pdf-modal-icon">🔐</div>
+    <h3 id="pdfModalTitle">Accesso Riservato</h3>
+    <p>Inserisci il token segreto per scaricare il PDF completo con tutte le infografiche e i dati del report.</p>
+    <input type="password" id="pdfTokenInput" placeholder="Token segreto..." autocomplete="off"
+           onkeydown="if(event.key==='Enter') validateAndDownloadPdf()" />
+    <div class="pdf-modal-error" id="pdfTokenError"></div>
+    <div class="pdf-modal-actions" id="pdfModalActions">
+      <button class="btn-cancel" onclick="closePdfModal()">Annulla</button>
+      <button class="btn-confirm" onclick="validateAndDownloadPdf()">🔓 Sblocca &amp; Scarica</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // SHA-256 hash of the access token (token not stored in source)
+  const PDF_TOKEN_HASH = '4cf0d920aa3efab98ff095c6299d16ce12f6679edaffba138c99b9bbb15648ee';
+
+  function openPdfModal() {
+    document.getElementById('pdfTokenInput').value = '';
+    document.getElementById('pdfTokenError').textContent = '';
+    document.getElementById('pdfTokenInput').classList.remove('error');
+    document.getElementById('pdfModalActions').style.display = 'flex';
+    document.getElementById('pdfModalOverlay').classList.add('open');
+    setTimeout(() => document.getElementById('pdfTokenInput').focus(), 80);
+  }
+
+  function closePdfModal() {
+    document.getElementById('pdfModalOverlay').classList.remove('open');
+  }
+
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('pdfModalOverlay')) closePdfModal();
+  }
+
+  async function sha256hex(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  async function validateAndDownloadPdf() {
+    const input = document.getElementById('pdfTokenInput');
+    const errorEl = document.getElementById('pdfTokenError');
+    const actionsEl = document.getElementById('pdfModalActions');
+    const token = input.value.trim();
+
+    if (!token) {
+      errorEl.textContent = 'Inserisci il token per continuare.';
+      input.classList.add('error');
+      return;
+    }
+
+    const hash = await sha256hex(token);
+    if (hash !== PDF_TOKEN_HASH) {
+      errorEl.textContent = '❌ Token non valido. Contatta il proprietario del report.';
+      input.classList.add('error');
+      input.value = '';
+      input.focus();
+      return;
+    }
+
+    // Token valid — show spinner and generate PDF
+    input.classList.remove('error');
+    errorEl.textContent = '';
+    actionsEl.innerHTML = '<div class="pdf-generating"><div class="pdf-spinner"></div>Generazione PDF in corso…</div>';
+
+    // Show all sections for PDF rendering
+    const sections = document.querySelectorAll('.section');
+    const hiddenSections = [];
+    sections.forEach(s => {
+      if (!s.classList.contains('active')) {
+        s.style.display = 'block';
+        hiddenSections.push(s);
+      }
+    });
+
+    // Short delay so charts finish rendering
+    await new Promise(r => setTimeout(r, 400));
+
+    const opt = {
+      margin:       [12, 10, 12, 10],
+      filename:     'TAGARO-Trophy-Locations-Report-2026.pdf',
+      image:        { type: 'jpeg', quality: 0.95 },
+      html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+
+    const element = document.querySelector('main');
+
+    html2pdf().set(opt).from(element).save().then(() => {
+      // Restore hidden sections
+      hiddenSections.forEach(s => { s.style.display = ''; });
+      closePdfModal();
+    }).catch(() => {
+      hiddenSections.forEach(s => { s.style.display = ''; });
+      actionsEl.innerHTML = `
+        <button class="btn-cancel" onclick="closePdfModal()">Chiudi</button>
+        <button class="btn-confirm" onclick="validateAndDownloadPdf()">Riprova</button>`;
+      errorEl.textContent = '⚠️ Errore durante la generazione del PDF. Riprova.';
+    });
+  }
+</script>
+
 </body>
 </html>
