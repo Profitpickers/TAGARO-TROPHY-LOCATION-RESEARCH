@@ -402,7 +402,7 @@
       <button class="tab-btn" onclick="showTab('milano')">🏙️ Milano</button>
       <button class="tab-btn" onclick="showTab('venezia')">🚢 Venezia</button>
       <button class="tab-btn" onclick="showTab('analysis')">💎 Analisi Prestige</button>
-      <button class="tab-btn" onclick="showTab('prompt')">💡 Prompt Perfetto</button>
+
     </div>
   </div>
 </header>
@@ -867,62 +867,7 @@
 
   </div>
 
-  <!-- ===== PROMPT ===== -->
-  <div id="tab-prompt" class="section">
 
-    <div class="section-title">
-      <span class="city-badge" style="background: linear-gradient(135deg, #1a3a5c 0%, #0d2540 100%);">Strumenti</span>
-      <h2>Il Prompt Perfetto RSIC-HP</h2>
-    </div>
-
-    <div class="alert-box prestige">
-      <div class="alert-icon">🎯</div>
-      <div class="alert-content">
-        <h4>RSIC-HP: Ricerca Strategica Immobili Commerciali — High Prestige</h4>
-        <p>Questo prompt è stato ottimizzato per ricerche immobiliari di lusso. Usa questo template per estendere la ricerca ad altre città europee (Roma, Firenze, Torino) o per aggiornamenti futuri. Adattalo inserendo la città target e i parametri specifici del tuo brand.</p>
-      </div>
-    </div>
-
-    <button class="copy-btn" onclick="copyPrompt()">📋 Copia il Prompt negli Appunti</button>
-
-    <div style="background: #1e2a38; border-radius: 14px; padding: 28px 32px; color: #e8edf5; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.8; white-space: pre-wrap; overflow-x: auto; box-shadow: var(--shadow); margin-bottom: 24px; position: relative;" id="promptBox">
-<span style="color: var(--accent); font-weight: 700;">RSIC-HP v1.0 — Ricerca Strategica Immobili Commerciali High Prestige</span>
-
-Ciao, sono <span style="color: var(--accent);">Vito Iacobellis</span>, agisco per conto di <span style="color: var(--accent);">TAGARO.it</span> (fatturato 24M€, 19M bottiglie vendute nel 2025).
-
-Sono stato incaricato di trovare immobili commerciali di ALTO PRESTIGIO da destinare a punti vendita di riferimento nelle città principali.
-
-<span style="color: var(--accent); font-weight: 700;">PARAMETRI TASSATIVI:</span>
-- Città target: [INSERISCI CITTÀ]
-- Superficie: 40–50 mq (flessibile per immobili di eccezionale prestigio)
-- Contratto: SOLO ACQUISTO
-- Destinazione: Commerciale / Retail
-- Geolocalizzazione: TROPHY LOCATION (massimo prestigio, altissima affluenza pedonale qualificata)
-
-<span style="color: var(--accent); font-weight: 700;">Fornisci:</span>
-
-1. Analisi del Mercato Luxury
-Prezzi medi nelle zone di ALTO PRESTIGIO, trend, previsioni.
-
-2. Mappatura Zone Trophy
-Quali quartieri/vie sono "Trophy Locations" per un brand da 24M€?
-
-3. Immobili Identificati
-Per ogni immobile: indirizzo, metratura, prezzo, caratteristiche, agenzia, valutazione prestige.
-
-4. Analisi Competitiva
-Presence di brand di lusso nelle vicinanze.
-
-5. Vincoli & Burocrazia
-Soprintendenza, moratorie, tempistiche.
-
-6. Costi Accessori
-Stima completa per un brand premium.
-
-7. Analisi Finanziaria
-ROI, rivalutazione patrimoniale, flusso pedonale qualificato.</div>
-
-  </div>
 
 </main>
 
@@ -937,16 +882,6 @@ ROI, rivalutazione patrimoniale, flusso pedonale qualificato.</div>
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('tab-' + name).classList.add('active');
     event.target.classList.add('active');
-  }
-
-  function copyPrompt() {
-    const box = document.getElementById('promptBox');
-    const text = box.innerText;
-    navigator.clipboard.writeText(text).then(() => {
-      const btn = document.querySelector('.copy-btn');
-      btn.textContent = '✅ Copiato!';
-      setTimeout(() => { btn.textContent = '📋 Copia il Prompt negli Appunti'; }, 2000);
-    });
   }
 
   // CHART: Prices
