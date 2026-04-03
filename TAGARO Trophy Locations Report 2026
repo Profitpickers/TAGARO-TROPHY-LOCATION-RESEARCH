@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TAGARO.it — PRESTIGE EDITION: Trophy Locations Report 2026</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --primary: #0d2540;
+      --accent: #e8a020;
+      --accent2: #2e7d9e;
+      --bg: #f1f4f8;
+      --card: #ffffff;
+      --text: #1e2a38;
+      --muted: #6b7a8d;
+      --gold: #d4af37;
+      --shadow: 0 6px 32px rgba(13,37,64,0.15);
+      --shadow-lg: 0 12px 48px rgba(13,37,64,0.20);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, var(--bg) 0%, #e8ecf1 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* HEADER PREMIUM */
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, #051a2e 100%);
+      color: #fff;
+      padding: 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-lg);
+    }
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .logo-icon {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; font-weight: 900; color: var(--primary);
+      box-shadow: 0 4px 16px rgba(232,160,32,0.3);
+    }
+    .header-title h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: 0.5px; }
+    .header-title p { font-size: 0.8rem; color: #a8c4e0; margin-top: 3px; }
+    .header-badge {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);
+      color: var(--primary);
+      font-size: 0.75rem;
+      font-weight: 900;
+      padding: 8px 18px;
+      border-radius: 24px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 12px rgba(232,160,32,0.25);
+    }
+
+    /* NAV TABS */
+    .nav-tabs {
+      background: linear-gradient(90deg, var(--primary) 0%, #051a2e 100%);
+      border-top: 2px solid var(--accent);
+    }
+    .nav-tabs-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.65);
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 14px 24px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { color: #fff; }
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* MAIN */
+    main { max-width: 1400px; margin: 0 auto; padding: 40px 24px 60px; }
+    .section { display: none; }
+    .section.active { display: block; animation: fadeIn 0.3s; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* HERO BANNER */
+    .hero-banner {
+      background: linear-gradient(120deg, var(--primary) 0%, var(--accent2) 100%);
+      border-radius: 20px;
+      padding: 48px 56px;
+      color: #fff;
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 30px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 400px;
+      height: 400px;
+      background: rgba(232,160,32,0.1);
+      border-radius: 50%;
+      z-index: 0;
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-banner h2 { font-size: 2rem; font-weight: 900; margin-bottom: 12px; letter-spacing: 1px; }
+    .hero-banner p { font-size: 1rem; color: rgba(255,255,255,0.9); max-width: 600px; line-height: 1.7; }
+    .hero-stats {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-stat {
+      background: rgba(255,255,255,0.12);
+      border-radius: 14px;
+      padding: 20px 28px;
+      text-align: center;
+      min-width: 120px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .hero-stat .num { font-size: 2.4rem; font-weight: 900; color: var(--accent); }
+    .hero-stat .lbl { font-size: 0.75rem; color: rgba(255,255,255,0.85); margin-top: 6px; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* CARDS GRID */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid #e8ecf1;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--gold) 100%);
+    }
+    .card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .card-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      background: linear-gradient(135deg, #e8f0fe 0%, #d4e8ff 100%);
+    }
+    .card h3 { font-size: 0.85rem; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+    .card .big-num { font-size: 2.4rem; font-weight: 900; color: var(--primary); margin: 8px 0; }
+    .card .sub { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+    /* CHART CONTAINERS */
+    .chart-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 28px;
+      margin-bottom: 40px;
+    }
+    .chart-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+      border: 1px solid #e8ecf1;
+    }
+    .chart-card h3 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .chart-card .chart-sub {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .chart-wrapper { position: relative; height: 300px; }
+
+    /* SECTION TITLE */
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      margin-top: 12px;
+    }
+    .section-title .city-badge {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent2) 100%);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .section-title h2 { font-size: 1.6rem; font-weight: 900; color: var(--primary); }
+
+    /* PROPERTY TABLE */
+    .table-wrap {
+      background: var(--card);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      border: 1px solid #e8ecf1;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+    .table-header {
+      padding: 20px 28px;
+      border-bottom: 2px solid #e8ecf1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: linear-gradient(90deg, #f8fafc 0%, #f1f4f8 100%);
+    }
+    .table-header h3 { font-size: 1.1rem; font-weight: 800; color: var(--primary); }
+    .table-count {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);
+      color: var(--primary);
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 14px;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      background: #f8fafc;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid #e8ecf1;
+    }
+    tbody tr { border-bottom: 1px solid #e8ecf1; transition: background 0.2s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #f8fafc; }
+    tbody td { padding: 16px; font-size: 0.9rem; vertical-align: middle; }
+    .prop-zone { font-weight: 800; color: var(--primary); }
+    .prop-addr { font-size: 0.82rem; color: var(--muted); margin-top: 3px; }
+    .price-tag {
+      font-weight: 900;
+      font-size: 1.1rem;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .price-mq {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .score-badge {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .score-prestige { background: linear-gradient(135deg, #ffe8cc 0%, #ffd699 100%); color: #8b4513; }
+    .score-high { background: #e8f5e9; color: #2e7d32; }
+    .score-mid { background: #fff8e1; color: #f57f17; }
+
+    /* ALERT BOX */
+    .alert-box {
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      border-left: 5px solid;
+    }
+    .alert-box.prestige { background: #fffaf0; border-left-color: var(--accent); }
+    .alert-box.warning { background: #fff8e1; border-left-color: #f57f17; }
+    .alert-box.success { background: #e8f5e9; border-left-color: #27ae60; }
+    .alert-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+    .alert-content h4 { font-size: 0.95rem; font-weight: 800; margin-bottom: 6px; }
+    .alert-content p { font-size: 0.87rem; line-height: 1.7; color: var(--text); }
+
+    /* ZONE CARDS */
+    .zones-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .zone-card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border: 2px solid #e8ecf1;
+      border-top: 5px solid var(--accent2);
+      transition: all 0.3s;
+    }
+    .zone-card.prestige { border-top-color: var(--accent); }
+    .zone-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .zone-card h4 { font-size: 0.95rem; font-weight: 800; color: var(--primary); margin-bottom: 10px; }
+    .zone-card .zone-price { font-size: 1.2rem; font-weight: 900; background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .zone-card .zone-desc { font-size: 0.8rem; color: var(--muted); margin-top: 6px; line-height: 1.6; }
+    .zone-card .zone-stars { color: var(--accent); font-size: 0.9rem; margin-top: 8px; }
+
+    /* FOOTER */
+    footer {
+      background: linear-gradient(90deg, var(--primary) 0%, #051a2e 100%);
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      padding: 28px 24px;
+      font-size: 0.82rem;
+      margin-top: 60px;
+    }
+    footer strong { color: var(--accent); }
+
+    /* RESPONSIVE */
+    @media (max-width: 700px) {
+      main { padding: 24px 12px 40px; }
+      .hero-banner { padding: 28px 20px; }
+      .hero-banner h2 { font-size: 1.4rem; }
+      .header-inner { padding: 16px 16px; }
+      .nav-tabs-inner { padding: 0 12px; }
+      .tab-btn { padding: 10px 12px; font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-logo">
+      <div class="logo-icon">T</div>
+      <div class="header-title">
+        <h1>TAGARO.it — PRESTIGE EDITION</h1>
+        <p>Trophy Locations Research · 24M€ Fatturato · Aprile 2026</p>
+      </div>
+    </div>
+    <div class="header-badge">🏆 Prestige</div>
+  </div>
+  <div class="nav-tabs">
+    <div class="nav-tabs-inner">
+      <button class="tab-btn active" onclick="showTab('overview')">📊 Panoramica</button>
+      <button class="tab-btn" onclick="showTab('milano')">🏙️ Milano</button>
+      <button class="tab-btn" onclick="showTab('venezia')">🚢 Venezia</button>
+      <button class="tab-btn" onclick="showTab('analysis')">💎 Analisi Prestige</button>
+      <button class="tab-btn" onclick="showTab('prompt')">💡 Prompt Perfetto</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===== OVERVIEW ===== -->
+  <div id="tab-overview" class="section active">
+
+    <div class="hero-banner">
+      <div class="hero-content">
+        <h2>Ricerca Riservata — Trophy Locations</h2>
+        <p>Per un brand di successo come TAGARO.it (19M bottiglie, 24M€ fatturato), la scelta della location non è solo una decisione operativa, ma un investimento strategico nel posizionamento globale. Questo report identifica le "Trophy Locations" — le posizioni di massimo prestigio e affluenza a Milano e Venezia.</p>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="num">7</div>
+          <div class="lbl">Immobili Prestige</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num">24M€</div>
+          <div class="lbl">Fatturato TAGARO</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num">2</div>
+          <div class="lbl">Città Elite</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPI CARDS -->
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🏙️</div>
+          <div>
+            <h3>Milano — Brera</h3>
+          </div>
+        </div>
+        <div class="big-num">€ 1.4M</div>
+        <div class="sub">Corso Garibaldi · 50 m² · 28.000 €/mq · Massima visibilità</div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🚢</div>
+          <div>
+            <h3>Venezia — San Marco</h3>
+          </div>
+        </div>
+        <div class="big-num">€ 8.5M</div>
+        <div class="sub">Piazza San Marco · 260 m² · 32.692 €/mq · Unico al mondo</div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">👥</div>
+          <div>
+            <h3>Affluenza Annua</h3>
+          </div>
+        </div>
+        <div class="big-num">100M+</div>
+        <div class="sub">Contatti visivi stimati · Brera + San Marco combinati</div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">💰</div>
+          <div>
+            <h3>ROI Strategico</h3>
+          </div>
+        </div>
+        <div class="big-num">8-10%</div>
+        <div class="sub">Rivalutazione patrimoniale + reddito da locazione</div>
+      </div>
+    </div>
+
+    <!-- CHARTS ROW 1 -->
+    <div class="chart-row">
+      <div class="chart-card">
+        <h3>Comparazione Prezzi Trophy Zones</h3>
+        <p class="chart-sub">Prezzi medi al metro quadro nelle zone di massimo prestigio</p>
+        <div class="chart-wrapper">
+          <canvas id="chartPrices"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Analisi Multidimensionale Prestige</h3>
+        <p class="chart-sub">Radar: Prestigio, Affluenza, ROI, Accessibilità, Brand Match</p>
+        <div class="chart-wrapper">
+          <canvas id="chartRadar"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert-box prestige">
+      <div class="alert-icon">💎</div>
+      <div class="alert-content">
+        <h4>Cosa Significa "Trophy Location"</h4>
+        <p>Una Trophy Location è una posizione commerciale di massimo prestigio, caratterizzata da: (1) altissima affluenza pedonale qualificata, (2) vicinanza a brand di lusso e punti di interesse culturali, (3) visibilità globale, (4) potenziale di rivalutazione patrimoniale. Per TAGARO.it, significa una vetrina capace di raccontare il successo del brand (19M bottiglie, 24M€ fatturato) a un pubblico internazionale di alto spendente.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== MILANO ===== -->
+  <div id="tab-milano" class="section">
+
+    <div class="section-title">
+      <span class="city-badge">Milano</span>
+      <h2>Trophy Locations — Brera & Quadrilatero</h2>
+    </div>
+
+    <div class="alert-box prestige">
+      <div class="alert-icon">✨</div>
+      <div class="alert-content">
+        <h4>Milano: Capitale Mondiale del Design e della Moda</h4>
+        <p>Brera è il cuore pulsante del design italiano e della cultura contemporanea. Corso Garibaldi è la High Street per eccellenza, dove ogni metro quadro racconta una storia di lusso e innovazione. Per TAGARO.it, una presenza in Brera significa posizionarsi accanto ai migliori brand internazionali, in una zona dove il traffico pedonale è costante e qualificato.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:1.1rem;font-weight:800;color:var(--primary);margin-bottom:16px;">🗺️ Zone di Massimo Prestigio a Milano</h3>
+    <div class="zones-grid">
+      <div class="zone-card prestige">
+        <h4>Quadrilatero della Moda</h4>
+        <div class="zone-price">> 30.000 €/m²</div>
+        <div class="zone-desc">Via della Spiga, Montenapoleone. Il vertice mondiale del retail di lusso.</div>
+        <div class="zone-stars">★★★★★ (10/10)</div>
+      </div>
+      <div class="zone-card prestige">
+        <h4>Corso Garibaldi, Brera</h4>
+        <div class="zone-price">18.000–28.000 €/m²</div>
+        <div class="zone-desc">High Street dinamica, perfetta per brand moderni. Massima visibilità.</div>
+        <div class="zone-stars">★★★★★ (9/10)</div>
+      </div>
+      <div class="zone-card prestige">
+        <h4>Via Brera</h4>
+        <div class="zone-price">15.000–25.000 €/m²</div>
+        <div class="zone-desc">Cuore artistico, gallerie, musei. Target internazionale colto.</div>
+        <div class="zone-stars">★★★★☆ (8/10)</div>
+      </div>
+      <div class="zone-card prestige">
+        <h4>Piazza del Carmine</h4>
+        <div class="zone-price">12.000–18.000 €/m²</div>
+        <div class="zone-desc">Zona pedonale esclusiva, ristoranti e design boutique.</div>
+        <div class="zone-stars">★★★★☆ (8/10)</div>
+      </div>
+    </div>
+
+    <!-- Tabella Immobili -->
+    <div class="table-wrap">
+      <div class="table-header">
+        <h3>📋 Immobili Trophy — Milano</h3>
+        <span class="table-count">7 annunci prestige</span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Zona / Indirizzo</th>
+              <th>m²</th>
+              <th>Prezzo</th>
+              <th>€/m²</th>
+              <th>Agenzia</th>
+              <th>Valutazione</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><div class="prop-zone">Corso Garibaldi, Brera</div><div class="prop-addr">Via di massimo prestigio e passaggio</div></td>
+              <td>50</td>
+              <td><div class="price-tag">€ 1.400.000</div><div class="price-mq">28.000 €/m²</div></td>
+              <td>28.000</td>
+              <td>Maxire</td>
+              <td><span class="score-badge score-prestige">🏆 TOP</span></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><div class="prop-zone">Corso Garibaldi (nuovo)</div><div class="prop-addr">Piano terra, libero subito</div></td>
+              <td>70</td>
+              <td><div class="price-tag">€ 1.250.000</div><div class="price-mq">17.857 €/m²</div></td>
+              <td>17.857</td>
+              <td>Maxire</td>
+              <td><span class="score-badge score-high">★ ECCELLENTE</span></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><div class="prop-zone">Piazza del Carmine, Brera</div><div class="prop-addr">Zona pedonale d'élite</div></td>
+              <td>120</td>
+              <td><div class="price-tag">€ 1.800.000</div><div class="price-mq">15.000 €/m²</div></td>
+              <td>15.000</td>
+              <td>Dharma House</td>
+              <td><span class="score-badge score-high">★ ECCELLENTE</span></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><div class="prop-zone">Foro Buonaparte, Brera</div><div class="prop-addr">Palazzo storico ristrutturato</div></td>
+              <td>150</td>
+              <td><div class="price-tag">€ 1.500.000</div><div class="price-mq">10.000 €/m²</div></td>
+              <td>10.000</td>
+              <td>Dharma House</td>
+              <td><span class="score-badge score-high">★ ECCELLENTE</span></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><div class="prop-zone">Via della Spiga (Quadrilatero)</div><div class="prop-addr">La "passerella urbana" del lusso</div></td>
+              <td>190</td>
+              <td><div class="price-tag">Trattativa Riservata</div><div class="price-mq">> 30.000 €/m²</div></td>
+              <td>—</td>
+              <td>Jarvés Luxury</td>
+              <td><span class="score-badge score-prestige">💎 PREMIUM</span></td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td><div class="prop-zone">Via Brera</div><div class="prop-addr">Cuore artistico, massima visibilità</div></td>
+              <td>620</td>
+              <td><div class="price-tag">Trattativa Riservata</div><div class="price-mq">—</div></td>
+              <td>—</td>
+              <td>Immobiliare Bassoli</td>
+              <td><span class="score-badge score-prestige">💎 PREMIUM</span></td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td><div class="prop-zone">Via Mercato, Brera</div><div class="prop-addr">Grande visibilità e eleganza</div></td>
+              <td>115</td>
+              <td><div class="price-tag">€ 2.880.000</div><div class="price-mq">25.043 €/m²</div></td>
+              <td>25.043</td>
+              <td>Immobiliare Bassoli</td>
+              <td><span class="score-badge score-prestige">🏆 TOP</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== VENEZIA ===== -->
+  <div id="tab-venezia" class="section">
+
+    <div class="section-title">
+      <span class="city-badge" style="background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);">Venezia</span>
+      <h2>Trophy Locations — San Marco & Rialto</h2>
+    </div>
+
+    <div class="alert-box prestige">
+      <div class="alert-icon">🌍</div>
+      <div class="alert-content">
+        <h4>Venezia: La Vetrina Globale</h4>
+        <p>San Marco è il luogo più iconico del mondo. Ogni anno, milioni di turisti internazionali transitano per le Mercerie e Piazza San Marco. Per un brand come TAGARO.it, una presenza qui significa visibilità globale istantanea. Tuttavia, i vincoli burocratici (Delibera n.13/2025) richiedono una verifica preliminare della compatibilità dell'attività.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:1.1rem;font-weight:800;color:var(--primary);margin-bottom:16px;">🗺️ Zone di Massimo Prestigio a Venezia</h3>
+    <div class="zones-grid">
+      <div class="zone-card prestige">
+        <h4>Piazza San Marco</h4>
+        <div class="zone-price">> 30.000 €/m²</div>
+        <div class="zone-desc">Il luogo più iconico del mondo. Visibilità globale assoluta.</div>
+        <div class="zone-stars">★★★★★ (10/10)</div>
+      </div>
+      <div class="zone-card prestige">
+        <h4>Mercerie / Calle dei Fuseri</h4>
+        <div class="zone-price">15.000–25.000 €/m²</div>
+        <div class="zone-desc">Passaggio incessante di turisti. Cuore commerciale storico.</div>
+        <div class="zone-stars">★★★★★ (9/10)</div>
+      </div>
+      <div class="zone-card prestige">
+        <h4>Rialto / San Polo</h4>
+        <div class="zone-price">12.000–20.000 €/m²</div>
+        <div class="zone-desc">Ponte di Rialto, massima affluenza. Zona commerciale tradizionale.</div>
+        <div class="zone-stars">★★★★☆ (8/10)</div>
+      </div>
+      <div class="zone-card prestige">
+        <h4>Calle del Lovo</h4>
+        <div class="zone-price">20.000–35.000 €/m²</div>
+        <div class="zone-desc">Collegamento strategico San Marco-Rialto. Altissima visibilità.</div>
+        <div class="zone-stars">★★★★★ (9/10)</div>
+      </div>
+    </div>
+
+    <!-- Tabella Immobili -->
+    <div class="table-wrap">
+      <div class="table-header">
+        <h3>📋 Immobili Trophy — Venezia</h3>
+        <span class="table-count">6 annunci prestige</span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Zona / Indirizzo</th>
+              <th>m²</th>
+              <th>Prezzo</th>
+              <th>€/m²</th>
+              <th>Agenzia</th>
+              <th>Valutazione</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><div class="prop-zone">Piazza San Marco</div><div class="prop-addr">Palazzetto commerciale unico</div></td>
+              <td>260</td>
+              <td><div class="price-tag">€ 8.500.000</div><div class="price-mq">32.692 €/m²</div></td>
+              <td>32.692</td>
+              <td>Santa Marina</td>
+              <td><span class="score-badge score-prestige">💎 UNICO</span></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><div class="prop-zone">Calle del Lovo, San Marco</div><div class="prop-addr">Immobile vincolato, conferimento esclusivo</div></td>
+              <td>252</td>
+              <td><div class="price-tag">€ 8.500.000</div><div class="price-mq">33.730 €/m²</div></td>
+              <td>33.730</td>
+              <td>Santa Marina</td>
+              <td><span class="score-badge score-prestige">💎 UNICO</span></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><div class="prop-zone">Piscina San Moise, San Marco</div><div class="prop-addr">Ultima attività gelateria</div></td>
+              <td>35</td>
+              <td><div class="price-tag">€ 2.240.000</div><div class="price-mq">64.000 €/m²</div></td>
+              <td>64.000</td>
+              <td>Schiavon</td>
+              <td><span class="score-badge score-prestige">🏆 TOP</span></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><div class="prop-zone">Calle dei Fuseri, San Marco</div><div class="prop-addr">Locato, altissimo passaggio</div></td>
+              <td>20</td>
+              <td><div class="price-tag">€ 380.000</div><div class="price-mq">19.000 €/m²</div></td>
+              <td>19.000</td>
+              <td>Remax</td>
+              <td><span class="score-badge score-high">★ ECCELLENTE</span></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><div class="prop-zone">Calle de La Fenice, San Marco</div><div class="prop-addr">Zona strategica Fenice</div></td>
+              <td>48</td>
+              <td><div class="price-tag">€ 185.000</div><div class="price-mq">3.854 €/m²</div></td>
+              <td>3.854</td>
+              <td>Easy Group</td>
+              <td><span class="score-badge score-high">★ OPPORTUNITÀ</span></td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td><div class="prop-zone">Rialto, San Polo</div><div class="prop-addr">Negozio locato bar/cicchetteria</div></td>
+              <td>—</td>
+              <td><div class="price-tag">€ 600.000</div><div class="price-mq">Reddito 5.5%</div></td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="score-badge score-high">★ REDDITO</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== ANALYSIS ===== -->
+  <div id="tab-analysis" class="section">
+
+    <div class="section-title">
+      <span class="city-badge" style="background: linear-gradient(135deg, #d4af37 0%, #e8a020 100%);">Analisi</span>
+      <h2>Analisi Prestige — Brand Alignment & ROI</h2>
+    </div>
+
+    <div class="alert-box prestige">
+      <div class="alert-icon">💡</div>
+      <div class="alert-content">
+        <h4>Perché le Trophy Locations Contano per TAGARO.it</h4>
+        <p>Con un fatturato di 24M€ e 19 milioni di bottiglie vendute, TAGARO.it non è un brand emergente: è un leader consolidato. La scelta della location deve riflettere questo status. Una Trophy Location non è solo uno spazio fisico, ma un'estensione del brand story — un luogo dove ogni cliente che entra sa di trovarsi in un posto speciale, curato, di qualità.</p>
+      </div>
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-card">
+        <h3>Confronto Prezzi Trophy Zones</h3>
+        <p class="chart-sub">Prezzi medi al metro quadro nelle zone di massimo prestigio</p>
+        <div class="chart-wrapper">
+          <canvas id="chartPricesAnalysis"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Valutazione Multidimensionale</h3>
+        <p class="chart-sub">Brera vs San Marco: Prestigio, Affluenza, ROI, Accessibilità, Brand Match</p>
+        <div class="chart-wrapper">
+          <canvas id="chartRadarAnalysis"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-header">
+        <h3>⚖️ Tabella Comparativa Strategica</h3>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Parametro</th>
+              <th>Milano — Brera</th>
+              <th>Venezia — San Marco</th>
+              <th>Vantaggio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Prestigio Globale</strong></td>
+              <td>9/10 — Design & Moda</td>
+              <td>10/10 — Icona Mondiale</td>
+              <td>Venezia (visibilità assoluta)</td>
+            </tr>
+            <tr>
+              <td><strong>Affluenza Annua</strong></td>
+              <td>~50M persone</td>
+              <td>~30M turisti + locali</td>
+              <td>Milano (volume)</td>
+            </tr>
+            <tr>
+              <td><strong>Prezzo Medio €/mq</strong></td>
+              <td>15.000–28.000</td>
+              <td>20.000–64.000</td>
+              <td>Milano (più accessibile)</td>
+            </tr>
+            <tr>
+              <td><strong>ROI Potenziale</strong></td>
+              <td>8–10% annuo</td>
+              <td>6–8% annuo</td>
+              <td>Milano (rendimento)</td>
+            </tr>
+            <tr>
+              <td><strong>Vincoli Burocratici</strong></td>
+              <td>Medi (Soprintendenza)</td>
+              <td>Alti (Delibera n.13/2025)</td>
+              <td>Milano (più semplice)</td>
+            </tr>
+            <tr>
+              <td><strong>Accessibilità</strong></td>
+              <td>Ottima (metro, auto)</td>
+              <td>Limitata (vaporetto, piedi)</td>
+              <td>Milano (logistica)</td>
+            </tr>
+            <tr>
+              <td><strong>Target Clientela</strong></td>
+              <td>Design lovers, professionisti</td>
+              <td>Turisti internazionali lusso</td>
+              <td>Venezia (internazionale)</td>
+            </tr>
+            <tr>
+              <td><strong>Raccomandazione</strong></td>
+              <td>🏆 PRIORITÀ 1</td>
+              <td>🏆 PRIORITÀ 2</td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== PROMPT ===== -->
+  <div id="tab-prompt" class="section">
+
+    <div class="section-title">
+      <span class="city-badge" style="background: linear-gradient(135deg, #1a3a5c 0%, #0d2540 100%);">Strumenti</span>
+      <h2>Il Prompt Perfetto RSIC-HP</h2>
+    </div>
+
+    <div class="alert-box prestige">
+      <div class="alert-icon">🎯</div>
+      <div class="alert-content">
+        <h4>RSIC-HP: Ricerca Strategica Immobili Commerciali — High Prestige</h4>
+        <p>Questo prompt è stato ottimizzato per ricerche immobiliari di lusso. Usa questo template per estendere la ricerca ad altre città europee (Roma, Firenze, Torino) o per aggiornamenti futuri. Adattalo inserendo la città target e i parametri specifici del tuo brand.</p>
+      </div>
+    </div>
+
+    <button class="copy-btn" onclick="copyPrompt()">📋 Copia il Prompt negli Appunti</button>
+
+    <div style="background: #1e2a38; border-radius: 14px; padding: 28px 32px; color: #e8edf5; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.8; white-space: pre-wrap; overflow-x: auto; box-shadow: var(--shadow); margin-bottom: 24px; position: relative;" id="promptBox">
+<span style="color: var(--accent); font-weight: 700;">RSIC-HP v1.0 — Ricerca Strategica Immobili Commerciali High Prestige</span>
+
+Ciao, sono <span style="color: var(--accent);">Vito Iacobellis</span>, agisco per conto di <span style="color: var(--accent);">TAGARO.it</span> (fatturato 24M€, 19M bottiglie vendute nel 2025).
+
+Sono stato incaricato di trovare immobili commerciali di ALTO PRESTIGIO da destinare a punti vendita di riferimento nelle città principali.
+
+<span style="color: var(--accent); font-weight: 700;">PARAMETRI TASSATIVI:</span>
+- Città target: [INSERISCI CITTÀ]
+- Superficie: 40–50 mq (flessibile per immobili di eccezionale prestigio)
+- Contratto: SOLO ACQUISTO
+- Destinazione: Commerciale / Retail
+- Geolocalizzazione: TROPHY LOCATION (massimo prestigio, altissima affluenza pedonale qualificata)
+
+<span style="color: var(--accent); font-weight: 700;">Fornisci:</span>
+
+1. Analisi del Mercato Luxury
+Prezzi medi nelle zone di ALTO PRESTIGIO, trend, previsioni.
+
+2. Mappatura Zone Trophy
+Quali quartieri/vie sono "Trophy Locations" per un brand da 24M€?
+
+3. Immobili Identificati
+Per ogni immobile: indirizzo, metratura, prezzo, caratteristiche, agenzia, valutazione prestige.
+
+4. Analisi Competitiva
+Presence di brand di lusso nelle vicinanze.
+
+5. Vincoli & Burocrazia
+Soprintendenza, moratorie, tempistiche.
+
+6. Costi Accessori
+Stima completa per un brand premium.
+
+7. Analisi Finanziaria
+ROI, rivalutazione patrimoniale, flusso pedonale qualificato.</div>
+
+  </div>
+
+</main>
+
+<footer>
+  <p>Report riservato PRESTIGE EDITION preparato per <strong>TAGARO.it</strong> · Incarico: <strong>Vito Iacobellis</strong> · Aprile 2026<br>
+  Fonti: Casa.it · Immobiliare.it · Idealista.it · Dharma House · Jarvés Luxury Real Estate · Santa Marina Immobiliare</p>
+</footer>
+
+<script>
+  function showTab(name) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function copyPrompt() {
+    const box = document.getElementById('promptBox');
+    const text = box.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = '✅ Copiato!';
+      setTimeout(() => { btn.textContent = '📋 Copia il Prompt negli Appunti'; }, 2000);
+    });
+  }
+
+  // CHART: Prices
+  new Chart(document.getElementById('chartPrices'), {
+    type: 'bar',
+    data: {
+      labels: ['Quadrilatero', 'Brera Top', 'Brera Mid', 'San Marco', 'Rialto', 'Mestre'],
+      datasets: [{
+        label: '€/m²',
+        data: [35000, 28000, 15000, 45000, 15000, 2200],
+        backgroundColor: ['#0d2540','#1a3a5c','#2e7d9e','#e8a020','#c4870a','#27ae60'],
+        borderRadius: 8
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { ticks: { callback: v => '€' + (v/1000).toFixed(0) + 'K' } } }
+    }
+  });
+
+  // CHART: Radar
+  new Chart(document.getElementById('chartRadar'), {
+    type: 'radar',
+    data: {
+      labels: ['Prestigio', 'Affluenza', 'ROI', 'Accessibilità', 'Brand Match'],
+      datasets: [
+        {
+          label: 'Brera (Milano)',
+          data: [9, 8, 8, 9, 9],
+          backgroundColor: 'rgba(26,58,92,0.2)',
+          borderColor: '#1a3a5c',
+          pointBackgroundColor: '#1a3a5c',
+          borderWidth: 2
+        },
+        {
+          label: 'San Marco (Venezia)',
+          data: [10, 10, 6, 4, 10],
+          backgroundColor: 'rgba(232,160,32,0.2)',
+          borderColor: '#e8a020',
+          pointBackgroundColor: '#e8a020',
+          borderWidth: 2
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: { r: { min: 0, max: 10, ticks: { stepSize: 2 } } }
+    }
+  });
+
+  // CHART: Prices Analysis
+  new Chart(document.getElementById('chartPricesAnalysis'), {
+    type: 'bar',
+    data: {
+      labels: ['Quadrilatero', 'Brera', 'San Marco', 'Rialto', 'Mestre'],
+      datasets: [{
+        label: 'Prezzo Medio (€/mq)',
+        data: [35000, 18000, 45000, 15000, 2200],
+        backgroundColor: ['#0d2540','#1a3a5c','#e8a020','#c4870a','#27ae60'],
+        borderRadius: 8
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { ticks: { callback: v => '€' + (v/1000).toFixed(0) + 'K' } } }
+    }
+  });
+
+  // CHART: Radar Analysis
+  new Chart(document.getElementById('chartRadarAnalysis'), {
+    type: 'radar',
+    data: {
+      labels: ['Prestigio', 'Affluenza', 'ROI', 'Accessibilità', 'Brand Match'],
+      datasets: [
+        {
+          label: 'Brera (Milano)',
+          data: [9, 8, 8, 9, 9],
+          backgroundColor: 'rgba(26,58,92,0.2)',
+          borderColor: '#1a3a5c',
+          pointBackgroundColor: '#1a3a5c',
+          borderWidth: 2.5
+        },
+        {
+          label: 'San Marco (Venezia)',
+          data: [10, 10, 6, 4, 10],
+          backgroundColor: 'rgba(232,160,32,0.2)',
+          borderColor: '#e8a020',
+          pointBackgroundColor: '#e8a020',
+          borderWidth: 2.5
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: { r: { min: 0, max: 10, ticks: { stepSize: 2 } } }
+    }
+  });
+</script>
+</body>
+</html>
